@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Trigonométrico: A Jornada do Arco</title>
+    <!-- Tailwind CSS para estilização moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones imersivos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX para renderização perfeita de equações matemáticas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <!-- Confetes para as comemorações de acertos e vitória -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap');
+        
+        .font-game {
+            font-family: 'Press Start 2P', monospace;
+        }
+        .font-main {
+            font-family: 'Rajdhani', sans-serif;
+        }
+        body {
+            background-color: #05070f;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .neon-border-indigo {
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+            border: 1.5px solid rgba(99, 102, 241, 0.6);
+        }
+        .neon-border-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            border: 1.5px solid rgba(16, 185, 129, 0.6);
+        }
+        .btn-game-active {
+            box-shadow: 0 4px 0px #312e81;
+            transform: translateY(-2px);
+            transition: all 0.15s ease-in-out;
+        }
+        .btn-game-active:active {
+            box-shadow: 0 0px 0px #312e81;
+            transform: translateY(2px);
+        }
+        
+        @keyframes float-slow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .animate-float {
+            animation: float-slow 6s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.4)); }
+            50% { filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.9)); }
+        }
+        .pulse-glow-effect {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes bg-space {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .space-gradient {
+            background: linear-gradient(-45deg, #05070f, #0d122b, #070913, #151233);
+            background-size: 400% 400%;
+            animation: bg-space 20s ease infinite;
+        }
+
+        /* Customização refinada da barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(17, 24, 39, 0.4);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="font-main min-h-screen flex flex-col justify-between space-gradient relative">
+
+    <!-- Estrelas de fundo animadas por CSS absoluto -->
+    <div class="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
+        <div class="absolute top-10 left-10 w-2 h-2 bg-white rounded-full animate-ping" style="animation-duration: 3s;"></div>
+        <div class="absolute top-1/4 right-20 w-3 h-3 bg-indigo-400 rounded-full animate-pulse" style="animation-duration: 4s;"></div>
+        <div class="absolute bottom-1/3 left-1/5 w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping" style="animation-duration: 5s;"></div>
+        <div class="absolute bottom-10 right-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-pulse" style="animation-duration: 2.5s;"></div>
+    </div>
+
+    <!-- TELA DE LOGIN (SOBREPOSIÇÃO INICIAL) -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
+        <div class="glass neon-border-indigo max-w-md w-full rounded-3xl p-8 text-center animate-float relative overflow-hidden">
+            <div class="absolute -top-12 -left-12 w-24 h-24 bg-indigo-600/20 rounded-full blur-xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-24 h-24 bg-purple-600/20 rounded-full blur-xl"></div>
+            
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 w-20 h-20 rounded-2xl mx-auto flex items-center justify-center text-white shadow-lg shadow-indigo-500/50 mb-6">
+                <i class="fa-solid fa-graduation-cap text-4xl"></i>
+            </div>
+            
+            <h2 class="text-3xl font-bold text-white tracking-widest uppercase mb-1">TrigoQuest</h2>
+            <p class="text-xs text-indigo-400 font-game mb-6">PORTAL DE ACESSO EXCLUSIVO</p>
+            
+            <div class="mb-6 text-left">
+                <label for="student-name" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Nome Completo do Aluno:</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-400">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </span>
+                    <input type="text" id="student-name" class="w-full pl-10 pr-4 py-3 bg-slate-900 border border-indigo-500/40 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400" placeholder="Digite seu nome para iniciar...">
+                </div>
+                <p id="login-error" class="text-red-400 text-xs mt-2 hidden"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Por favor, insira o seu nome para continuar.</p>
+            </div>
+            
+            <button onclick="submitLogin()" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl transition-all btn-game-active flex items-center justify-center gap-2 text-sm uppercase tracking-wider shadow-lg shadow-indigo-600/30">
+                Iniciar Missão <i class="fa-solid fa-rocket animate-bounce"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO DO JOGO -->
+    <header class="glass sticky top-0 z-40 px-4 py-3 border-b border-indigo-900/40">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 rounded-lg text-white shadow-lg">
+                    <i class="fa-solid fa-compass-drafting text-xl animate-spin" style="animation-duration: 10s;"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white tracking-wider flex items-center gap-2">
+                        TRIGOQUEST <span class="text-xs font-game text-purple-400 bg-purple-950 px-2 py-1 rounded">ESTUDO FORMAL</span>
+                    </h1>
+                    <!-- Crachá com Nome do Aluno -->
+                    <p class="text-xs text-gray-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-id-badge text-indigo-400"></i> Aluno(a): 
+                        <span id="student-display-name" class="text-indigo-300 font-bold bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-800/40">Conectando...</span>
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NAVEGAÇÃO ENTRE ABAS -->
+            <nav class="flex gap-2">
+                <button onclick="switchTab('adventure')" id="btn-tab-adventure" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all bg-indigo-600 text-white shadow-md">
+                    <i class="fa-solid fa-gamepad mr-1"></i> Campanha
+                </button>
+                <button onclick="switchTab('circle')" id="btn-tab-circle" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:bg-gray-800 text-gray-300">
+                    <i class="fa-solid fa-circle-notch mr-1"></i> Círculo Interativo
+                </button>
+                <button onclick="switchTab('cheatsheet')" id="btn-tab-cheatsheet" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:bg-gray-800 text-gray-300">
+                    <i class="fa-solid fa-book mr-1"></i> Guia de Fórmulas
+                </button>
+            </nav>
+
+            <!-- PAINEL DE STATUS -->
+            <div class="flex items-center gap-4 bg-gray-950 px-4 py-2 rounded-full border border-gray-800">
+                <div class="flex items-center gap-1">
+                    <span class="text-xs text-gray-400 mr-1">VIDAS:</span>
+                    <span id="heart-container" class="flex gap-0.5">
+                        <!-- Corações dinâmicos -->
+                    </span>
+                </div>
+                <div class="h-4 w-px bg-gray-700"></div>
+                <div class="text-sm font-semibold text-yellow-400">
+                    <i class="fa-solid fa-star mr-1"></i> Pontos: <span id="score" class="font-mono">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl w-full mx-auto px-4 py-6 flex-grow">
+
+        <!-- ALERTA DE CONTEXTO ACADÊMICO -->
+        <div class="mb-4 bg-indigo-950/40 border border-indigo-800/60 rounded-lg p-3 text-xs text-indigo-300 flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-indigo-400 text-base"></i>
+            <span>Exercícios adaptados com rigor acadêmico formal a partir da imagem do documento original fornecido. (WhatsApp Image 2026-06-17 at 15.32.19.jpeg)</span>
+        </div>
+
+        <!-- SEÇÃO 1: MODO CAMPANHA -->
+        <section id="tab-adventure" class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+            
+            <!-- OVERLAY DE FIM DE JOGO / VITÓRIA (Sem bugs de reinício de DOM) -->
+            <div id="game-state-overlay" class="hidden absolute inset-0 z-30 bg-slate-950/95 rounded-3xl flex flex-col items-center justify-center p-8 text-center border border-indigo-900/50">
+                <div id="overlay-icon-container" class="w-24 h-24 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                    <i id="overlay-icon" class="text-5xl"></i>
+                </div>
+                <h2 id="overlay-title" class="text-3xl font-bold text-white mb-2"></h2>
+                <p id="overlay-badge" class="font-game text-xs mb-4"></p>
+                <p id="overlay-desc" class="text-sm text-gray-300 max-w-lg mb-8 leading-relaxed"></p>
+                <button onclick="cleanReset()" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl btn-game-active transition-all text-sm uppercase tracking-widest shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Tentar Novamente
+                </button>
+            </div>
+
+            <!-- Progresso e Instruções Finais -->
+            <div class="lg:col-span-1 glass rounded-2xl p-4 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-indigo-400 animate-pulse"></i> Mapa de Desafios
+                    </h3>
+                    <p class="text-sm text-gray-400 mb-4">Selecione ou siga a sequência cronológica dos 11 problemas da sua lista.</p>
+                    
+                    <div id="quest-map" class="space-y-2 max-h-[380px] overflow-y-auto pr-2">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="mt-6 p-3 bg-purple-950/20 border border-purple-900/40 rounded-xl">
+                    <div class="flex items-center gap-2 mb-1">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+                        <span class="text-xs font-bold text-purple-300">ESTUDO ATIVO:</span>
+                    </div>
+                    <p class="text-xs text-purple-200">A análise do sinal segundo o quadrante cartesiano é crucial para evitar perdas de pontuação na avaliação escrita.</p>
+                </div>
+            </div>
+
+            <!-- Card da Pergunta e Fluxo de Jogo -->
+            <div class="lg:col-span-2 flex flex-col gap-4">
+                
+                <!-- GUARDIÃO MATEMÁTICO (Representação do Nível de Dificuldade) -->
+                <div class="glass neon-border-indigo rounded-2xl p-5 relative overflow-hidden flex flex-col md:flex-row items-center gap-6">
+                    <div class="absolute inset-0 bg-gradient-to-r from-indigo-950/30 to-transparent pointer-events-none"></div>
+                    
+                    <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-950 to-slate-900 border-2 border-indigo-500 flex flex-col items-center justify-center relative shadow-inner shadow-indigo-500/30 animate-pulse">
+                        <i id="boss-icon" class="fa-solid fa-dragon text-4xl text-indigo-400"></i>
+                        <span id="boss-level" class="absolute bottom-1 bg-indigo-900 text-indigo-100 px-1.5 py-0.5 rounded text-[9px] font-game">LV. 01</span>
+                    </div>
+
+                    <div class="flex-grow text-center md:text-left">
+                        <span class="text-xs font-game text-indigo-400 tracking-widest block mb-1">PROVA DO GUARDIÃO</span>
+                        <h2 id="boss-name" class="text-xl font-bold text-white mb-1">O Guardião da Função f(x)</h2>
+                        <div class="w-full bg-gray-800 rounded-full h-2.5 mt-2 overflow-hidden border border-gray-700">
+                            <div id="boss-hp-bar" class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                        </div>
+                        <p id="boss-dialogue" class="text-xs italic text-gray-400 mt-2">"Você é capaz de determinar rigorosamente o valor numérico desse arco?"</p>
+                    </div>
+                </div>
+
+                <!-- CARD PRINCIPAL DA QUESTÃO -->
+                <div class="glass rounded-2xl p-6 relative">
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="quest-badge" class="px-2.5 py-0.5 bg-indigo-900/50 text-indigo-300 border border-indigo-800 text-xs rounded-full font-bold">Fase 1</span>
+                        <span class="text-xs text-gray-500">Exercício de Referência: <span id="exercise-ref">#1</span></span>
+                    </div>
+
+                    <!-- Enunciado com Formulação Formal -->
+                    <div id="quest-text" class="text-lg text-white font-medium mb-6 leading-relaxed">
+                        Carregando enunciado...
+                    </div>
+
+                    <!-- Dica Teórica -->
+                    <button id="hint-btn" onclick="revealHint()" class="mb-4 inline-flex items-center gap-2 text-xs text-yellow-400 hover:text-yellow-300 transition-colors">
+                        <i class="fa-solid fa-lightbulb"></i> Consultar postulado de suporte
+                    </button>
+                    <div id="hint-text" class="hidden mb-4 p-3 bg-yellow-950/25 border border-yellow-800/40 text-xs text-yellow-200 rounded-lg leading-relaxed">
+                        <!-- Dica formalizada -->
+                    </div>
+
+                    <!-- Opções de Escolha em Formato Acadêmico -->
+                    <div id="options-container" class="grid grid-cols-1 gap-3 mb-4">
+                        <!-- Injetado dinamicamente -->
+                    </div>
+
+                    <!-- PAINEL DE FEEDBACK E RESOLUÇÃO -->
+                    <div id="feedback-panel" class="hidden mt-6 p-5 rounded-xl border transition-all duration-300">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div id="feedback-icon-bg" class="p-2 rounded-lg text-white">
+                                <i id="feedback-icon" class="fa-solid"></i>
+                            </div>
+                            <div>
+                                <h4 id="feedback-title" class="text-base font-bold">Demonstração Analítica</h4>
+                                <p id="feedback-subtitle" class="text-xs text-gray-400">Resolução algébrica com base na teoria trigonométrica</p>
+                            </div>
+                        </div>
+                        <div id="feedback-rationale" class="text-sm mb-4 leading-relaxed text-gray-200">
+                            <!-- Racional passo a passo -->
+                        </div>
+                        <div class="flex justify-end">
+                            <button id="next-btn" onclick="nextQuestion()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all btn-game-active flex items-center gap-2 text-sm shadow-lg shadow-emerald-600/20">
+                                Avançar <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2: CÍRCULO TRIGONOMÉTRICO INTERATIVO -->
+        <section id="tab-circle" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Círculo SVG Dinâmico -->
+                <div class="lg:col-span-2 glass neon-border-emerald rounded-2xl p-6 flex flex-col items-center justify-center relative">
+                    <h3 class="text-lg font-bold text-white mb-2 self-start flex items-center gap-2">
+                        <i class="fa-solid fa-circle-notch text-emerald-400"></i> 
+                        Estudo Visual do Ciclo Trigonométrico
+                    </h3>
+                    <p class="text-sm text-gray-400 mb-6 self-start">
+                        Observe a variação das grandezas fundamentais: 
+                        <span class="text-red-400 font-bold">Seno (Eixo de Ordenadas)</span>, 
+                        <span class="text-blue-400 font-bold">Cosseno (Eixo de Abscissas)</span> e 
+                        <span class="text-emerald-400 font-bold">Tangente (Reta Tangente Externa)</span>.
+                    </p>
+
+                    <div class="relative w-full max-w-[360px] aspect-square bg-slate-950 rounded-full border-2 border-indigo-500/20 p-2 shadow-2xl">
+                        <svg id="trig-svg" viewBox="-150 -150 300 300" class="w-full h-full">
+                            <!-- Demarcações de Quadrantes Cartesianos -->
+                            <text x="60" y="-60" fill="#4b5563" class="font-bold text-lg select-none opacity-60">I</text>
+                            <text x="-75" y="-60" fill="#4b5563" class="font-bold text-lg select-none opacity-60">II</text>
+                            <text x="-75" y="75" fill="#4b5563" class="font-bold text-lg select-none opacity-60">III</text>
+                            <text x="60" y="75" fill="#4b5563" class="font-bold text-lg select-none opacity-60">IV</text>
+
+                            <!-- Eixos Cartesianos com Orientação Positiva -->
+                            <line x1="-140" y1="0" x2="140" y2="0" stroke="#4b5563" stroke-width="1.5" />
+                            <line x1="0" y1="-140" x2="0" y2="140" stroke="#4b5563" stroke-width="1.5" />
+                            
+                            <polygon points="140,-4 148,0 140,4" fill="#4b5563" />
+                            <polygon points="-4,-140 0,-148 4,-140" fill="#4b5563" />
+                            
+                            <!-- Ciclo Unitário de Raio R = 100 -->
+                            <circle cx="0" cy="0" r="100" fill="none" stroke="#6366f1" stroke-width="2" class="opacity-40" />
+                            
+                            <!-- Assíntota Vertical para Projeção da Tangente em X = 100 -->
+                            <line x1="100" y1="-140" x2="100" y2="140" stroke="#374151" stroke-width="1" stroke-dasharray="3,3" />
+                            
+                            <!-- Vetores Dinâmicos de Projeção -->
+                            <line id="cos-line" x1="0" y1="0" x2="0" y2="0" stroke="#3b82f6" stroke-width="4.5" stroke-linecap="round" />
+                            <line id="sin-line" x1="0" y1="0" x2="0" y2="0" stroke="#ef4444" stroke-width="4.5" stroke-linecap="round" />
+                            <line id="tan-line" x1="100" y1="0" x2="100" y2="0" stroke="#10b981" stroke-width="4.5" stroke-linecap="round" />
+                            
+                            <!-- Raio Vetor (Hipotenusa) -->
+                            <line id="angle-ray" x1="0" y1="0" x2="100" y2="0" stroke="#f59e0b" stroke-width="3" />
+                            <line id="secant-ray" x1="0" y1="0" x2="0" y2="0" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" />
+                            
+                            <!-- Ponto Extremidade da Circunferência -->
+                            <circle id="arc-point" cx="100" cy="0" r="6.5" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5" class="pulse-glow-effect" />
+                        </svg>
+                    </div>
+
+                    <!-- Slider de Ajuste Angular -->
+                    <div class="w-full mt-6 px-4">
+                        <div class="flex justify-between text-xs text-gray-400 mb-2">
+                            <span>$0^\circ \ (0\text{ rad})$</span>
+                            <span class="text-yellow-400 font-bold" id="slider-val">Arco selecionado: $45^\circ$</span>
+                            <span>$360^\circ \ (2\pi\text{ rad})$</span>
+                        </div>
+                        <input type="range" id="angle-slider" min="0" max="360" value="45" oninput="updateTrigCircle(this.value)" class="w-full accent-emerald-500 cursor-pointer h-2 bg-gray-800 rounded-lg">
+                    </div>
+                </div>
+
+                <!-- Painel dos Resultados e Projeções Geométricas -->
+                <div class="lg:col-span-1 flex flex-col gap-6">
+                    <div class="glass rounded-2xl p-5 border border-indigo-950">
+                        <h4 class="text-base font-bold text-white mb-4">Navegação por Arcos Notáveis</h4>
+                        <p class="text-xs text-gray-400 mb-3">Defina posições preestabelecidas baseadas na simetria trigonométrica:</p>
+                        
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="updateTrigCircle(0)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$0^\circ$</button>
+                            <button onclick="updateTrigCircle(30)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$30^\circ$</button>
+                            <button onclick="updateTrigCircle(45)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$45^\circ$</button>
+                            <button onclick="updateTrigCircle(60)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$60^\circ$</button>
+                            
+                            <button onclick="updateTrigCircle(90)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$90^\circ$</button>
+                            <button onclick="updateTrigCircle(120)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$120^\circ$</button>
+                            <button onclick="updateTrigCircle(135)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$135^\circ$</button>
+                            <button onclick="updateTrigCircle(150)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$150^\circ$</button>
+                            
+                            <button onclick="updateTrigCircle(180)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$180^\circ$</button>
+                            <button onclick="updateTrigCircle(225)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$225^\circ$</button>
+                            <button onclick="updateTrigCircle(270)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$270^\circ$</button>
+                            <button onclick="updateTrigCircle(300)" class="px-2 py-1.5 bg-gray-900 hover:bg-emerald-950/40 rounded-lg text-xs text-white font-semibold transition-all hover:scale-105 hover:border-emerald-500 border border-transparent">$300^\circ$</button>
+                        </div>
+                    </div>
+
+                    <div class="glass rounded-2xl p-5 flex-grow flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <h4 class="text-base font-bold text-white">Análise de Abscissas e Ordenadas</h4>
+                            
+                            <!-- Seno -->
+                            <div class="flex justify-between items-center p-2.5 bg-red-950/20 border border-red-900/40 rounded-xl">
+                                <span class="text-red-400 font-semibold text-sm flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span> $\text{sen}(\theta)$ (Eixo Y)
+                                </span>
+                                <span id="circle-sin-val" class="font-mono text-sm font-bold text-white">0,707</span>
+                            </div>
+
+                            <!-- Cosseno -->
+                            <div class="flex justify-between items-center p-2.5 bg-blue-950/20 border border-blue-900/40 rounded-xl">
+                                <span class="text-blue-400 font-semibold text-sm flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping"></span> $\cos(\theta)$ (Eixo X)
+                                </span>
+                                <span id="circle-cos-val" class="font-mono text-sm font-bold text-white">0,707</span>
+                            </div>
+
+                            <!-- Tangente -->
+                            <div class="flex justify-between items-center p-2.5 bg-emerald-950/20 border border-emerald-900/40 rounded-xl">
+                                <span class="text-emerald-400 font-semibold text-sm flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span> $\text{tg}(\theta)$
+                                </span>
+                                <span id="circle-tan-val" class="font-mono text-sm font-bold text-white">1,000</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-800">
+                            <h5 class="text-xs font-bold text-gray-400 uppercase mb-2">Equivalente em Radianos</h5>
+                            <div id="circle-rad-val" class="text-sm font-mono text-indigo-300 font-bold bg-indigo-950/30 p-2 rounded-lg text-center">
+                                \frac{\pi}{4}\text{ rad}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3: GUIA RÁPIDO DE FÓRMULAS -->
+        <section id="tab-cheatsheet" class="hidden glass rounded-2xl p-6">
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-book-open text-indigo-400"></i> Repositório Teórico e Identidades de Suporte
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Estudo dos Sinais por Quadrante -->
+                <div class="p-4 bg-gray-950/50 rounded-xl border border-gray-800">
+                    <h4 class="text-sm font-bold text-yellow-400 mb-3 uppercase tracking-wider"><i class="fa-solid fa-map"></i> Sinais Cartesianos</h4>
+                    <ul class="space-y-2 text-xs text-gray-300 leading-relaxed">
+                        <li><strong>I Quadrante ($0^\circ \text{ a } 90^\circ$):</strong> $\text{sen}(\theta) > 0$, $\cos(\theta) > 0$, $\text{tg}(\theta) > 0$</li>
+                        <li><strong>II Quadrante ($90^\circ \text{ a } 180^\circ$):</strong> $\text{sen}(\theta) > 0$, $\cos(\theta) < 0$, $\text{tg}(\theta) < 0$</li>
+                        <li><strong>III Quadrante ($180^\circ \text{ a } 270^\circ$):</strong> $\text{sen}(\theta) < 0$, $\cos(\theta) < 0$, $\text{tg}(\theta) > 0$</li>
+                        <li><strong>IV Quadrante ($270^\circ \text{ a } 360^\circ$):</strong> $\text{sen}(\theta) < 0$, $\cos(\theta) > 0$, $\text{tg}(\theta) < 0$</li>
+                    </ul>
+                </div>
+
+                <!-- Relações Trigonométricas Fundamentais -->
+                <div class="p-4 bg-gray-950/50 rounded-xl border border-gray-800">
+                    <h4 class="text-sm font-bold text-yellow-400 mb-3 uppercase tracking-wider"><i class="fa-solid fa-calculator"></i> Identidades Fundamentais</h4>
+                    <div class="space-y-3 text-xs text-gray-300">
+                        <p class="font-mono bg-gray-950 p-2 rounded text-indigo-300 text-center text-sm">
+                            $\text{sen}^2(\theta) + \cos^2(\theta) = 1$
+                        </p>
+                        <p class="font-mono bg-gray-950 p-2 rounded text-indigo-300 text-center text-sm">
+                            $\text{tg}(\theta) = \frac{\text{sen}(\theta)}{\cos(\theta)}$
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Simetria Circular -->
+                <div class="p-4 bg-gray-950/50 rounded-xl border border-gray-800">
+                    <h4 class="text-sm font-bold text-yellow-400 mb-3 uppercase tracking-wider"><i class="fa-solid fa-arrows-spin"></i> Redução de Quadrantes</h4>
+                    <ul class="space-y-2 text-xs text-gray-300 leading-relaxed">
+                        <li><strong>Simetria no II Q:</strong> $\text{sen}(\pi - \alpha) = \text{sen}(\alpha)$</li>
+                        <li><strong>Simetria no III Q:</strong> $\text{sen}(\pi + \alpha) = -\text{sen}(\alpha)$</li>
+                        <li><strong>Simetria no IV Q:</strong> $\text{sen}(2\pi - \alpha) = -\text{sen}(\alpha)$</li>
+                        <li><strong>Determinação de arcos côngruos:</strong> $\theta_0 = \theta \pmod{360^\circ \text{ ou } 2\pi}$</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tabela de Arcos Notáveis -->
+            <div class="mt-8">
+                <h4 class="text-base font-bold text-white mb-4">Valores Trigonométricos Notáveis</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs text-gray-300">
+                        <thead>
+                            <tr class="bg-indigo-950/40 border-b border-indigo-900">
+                                <th class="p-3 text-indigo-300 font-semibold">Ângulo (Graus)</th>
+                                <th class="p-3 text-indigo-300 font-semibold">Arco (Radianos)</th>
+                                <th class="p-3 text-indigo-300 font-semibold">Seno</th>
+                                <th class="p-3 text-indigo-300 font-semibold">Cosseno</th>
+                                <th class="p-3 text-indigo-300 font-semibold">Tangente</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800">
+                            <tr>
+                                <td class="p-3 font-bold">$30^\circ$</td>
+                                <td class="p-3">$\frac{\pi}{6}$</td>
+                                <td class="p-3">$\frac{1}{2}$</td>
+                                <td class="p-3">$\frac{\sqrt{3}}{2}$</td>
+                                <td class="p-3">$\frac{\sqrt{3}}{3}$</td>
+                            </tr>
+                            <tr class="bg-gray-900/20">
+                                <td class="p-3 font-bold">$45^\circ$</td>
+                                <td class="p-3">$\frac{\pi}{4}$</td>
+                                <td class="p-3">$\frac{\sqrt{2}}{2}$</td>
+                                <td class="p-3">$\frac{\sqrt{2}}{2}$</td>
+                                <td class="p-3">$1$</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold">$60^\circ$</td>
+                                <td class="p-3">$\frac{\pi}{3}$</td>
+                                <td class="p-3">$\frac{\sqrt{3}}{2}$</td>
+                                <td class="p-3">$\frac{1}{2}$</td>
+                                <td class="p-3">$\sqrt{3}$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="glass border-t border-gray-800 py-4 px-4 text-center text-xs text-gray-500">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <span>Repositório interativo oficial para autoavaliação conceitual • 2026</span>
+            <span class="flex items-center gap-1 text-emerald-500"><i class="fa-solid fa-circle-check"></i> Modelagem e formulação validadas cientificamente</span>
+        </div>
+    </footer>
+
+    <!-- JS DO JOGO -->
+    <script>
+        // --- SINTETIZADOR DE ÁUDIO ---
+        let audioCtx = null;
+        let studentName = "";
+        
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playBeep(frequency, duration, type = 'sine') {
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = frequency;
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) { 
+                console.log('Interação ativa requerida para reproduzir efeitos sonoros.'); 
+            }
+        }
+
+        function playHitSound() {
+            playBeep(140, 0.2, 'sawtooth');
+            setTimeout(() => playBeep(100, 0.25, 'sawtooth'), 120);
+        }
+
+        function playSuccessSound() {
+            playBeep(523.25, 0.1, 'sine'); 
+            setTimeout(() => playBeep(659.25, 0.1, 'sine'), 80); 
+            setTimeout(() => playBeep(783.99, 0.2, 'sine'), 160); 
+        }
+
+        function playVictorySound() {
+            playBeep(261.63, 0.1); 
+            setTimeout(() => playBeep(329.63, 0.1), 100); 
+            setTimeout(() => playBeep(392.00, 0.1), 200); 
+            setTimeout(() => playBeep(523.25, 0.4), 300); 
+        }
+
+        // --- SUBMISSÃO DE LOGIN ---
+        function submitLogin() {
+            const nameInput = document.getElementById('student-name');
+            const errorText = document.getElementById('login-error');
+            
+            if (nameInput.value.trim() === "") {
+                errorText.classList.remove('hidden');
+                return;
+            }
+            
+            studentName = nameInput.value.trim();
+            document.getElementById('student-display-name').innerText = studentName;
+            document.getElementById('login-screen').classList.add('hidden');
+            
+            initAudio();
+            playBeep(523.25, 0.15);
+            setTimeout(() => playBeep(659.25, 0.15), 100);
+        }
+
+        // --- DEFINIÇÃO DAS QUESTÕES DA LISTA CURRICULAR ---
+        const questionsOriginal = [
+            {
+                id: 1,
+                ref: "Questão 1",
+                text: "Considere a lei de formação da função real de variável real definida por $f(x) = 4 \\cdot \\text{sen}(x) + 1$. Obtenha a imagem exata correspondente a $x = \\frac{\\pi}{6}\\text{ rad}$.",
+                hint: "Substitua a variável independente $x$ por $\\frac{\\pi}{6}$. Note que $\\frac{\\pi}{6}\\text{ rad}$ corresponde a $30^\\circ$ no sistema sexagesimal, onde a imagem de seno é $\\frac{1}{2}$.",
+                boss: "Mestre dos Radianos",
+                bossIcon: "fa-solid fa-wand-magic",
+                options: [
+                    { text: "$f\\left(\\frac{\\pi}{6}\\right) = 3$", isCorrect: true, rationale: "Ao realizarmos a substituição direta do valor do argumento:<br>$f\\left(\\frac{\\pi}{6}\\right) = 4 \\cdot \\text{sen}\\left(\\frac{\\pi}{6}\\right) + 1$.<br>Sabendo que $\\text{sen}\\left(\\frac{\\pi}{6}\\right) = \\frac{1}{2}$, calculamos:<br>$f\\left(\\frac{\\pi}{6}\\right) = 4 \\cdot \\left(\\frac{1}{2}\\right) + 1 = 2 + 1 = 3$." },
+                    { text: "$f\\left(\\frac{\\pi}{6}\\right) = 2$", isCorrect: false, rationale: "Lembre-se de adicionar a constante linear $+1$ após efetuar o produto com a amplitude $4$." },
+                    { text: "$f\\left(\\frac{\\pi}{6}\\right) = 5$", isCorrect: false, rationale: "Este resultado pressupõe erroneamente que $\\text{sen}\\left(\\frac{\\pi}{6}\\right) = 1$." },
+                    { text: "$f\\left(\\frac{\\pi}{6}\\right) = 1$", isCorrect: false, rationale: "A operação aditiva deve vir depois do produto $4 \\cdot \\text{sen}(x)$ conforme as regras de precedência aritmética." }
+                ]
+            },
+            {
+                id: 2,
+                ref: "Questão 2",
+                text: "Sejam as funções $f(x) = \\text{sen}(x)$ e $g(x) = \\cos(x)$. Determine analiticamente seus valores ordenados para as seguintes abscissas angulares: a) $150^\\circ$, b) $225^\\circ$ e c) $300^\\circ$. Assinale a alternativa correta:",
+                hint: "Verifique a localização dos arcos nos quadrantes cartesianos: $150^\circ$ pertence ao II Q, $225^\circ$ pertence ao III Q e $300^\circ$ pertence ao IV Q. Em seguida, proceda com as respectivas reduções simétricas ao I Q.",
+                boss: "Guerreiro dos Quadrantes",
+                bossIcon: "fa-solid fa-shield-halved",
+                options: [
+                    { text: "a) $\\text{sen} = \\frac{1}{2}, \\cos = -\\frac{\\sqrt{3}}{2}$; b) $\\text{sen} = -\\frac{\\sqrt{2}}{2}, \\cos = -\\frac{\\sqrt{2}}{2}$; c) $\\text{sen} = -\\frac{\\sqrt{3}}{2}, \\cos = \\frac{1}{2}$", isCorrect: true, rationale: "Análise analítica individual por arco:<br>• **$150^\\circ$ (II Quadrante):** Seno positivo; Cosseno negativo. Arco simétrico de $30^\\circ \\implies \\text{sen}(150^\\circ) = \\frac{1}{2}$, $\\cos(150^\\circ) = -\\frac{\\sqrt{3}}{2}$.<br>• **$225^\\circ$ (III Quadrante):** Ambos negativos. Arco simétrico de $45^\\circ \\implies \\text{sen}(225^\\circ) = -\\frac{\\sqrt{2}}{2}$, $\\cos(225^\\circ) = -\\frac{\\sqrt{2}}{2}$.<br>• **$300^\\circ$ (IV Quadrante):** Seno negativo; Cosseno positivo. Arco simétrico de $60^\\circ \\implies \\text{sen}(300^\\circ) = -\\frac{\\sqrt{3}}{2}$, $\\cos(300^\\circ) = \\frac{1}{2}$." },
+                    { text: "a) $\\text{sen} = \\frac{\\sqrt{3}}{2}, \\cos = -\\frac{1}{2}$; b) $\\text{sen} = \\frac{\\sqrt{2}}{2}, \\cos = -\\frac{\\sqrt{2}}{2}$; c) $\\text{sen} = -\\frac{1}{2}, \\cos = \\frac{\\sqrt{3}}{2}$", isCorrect: false, rationale: "Inversão dos arcos de referência. Lembre-se que o arco de $150^\circ$ é reduzido simetricamente a $30^\circ$, não a $60^\circ$." },
+                    { text: "a) $\\text{sen} = \\frac{1}{2}, \\cos = \\frac{\\sqrt{3}}{2}$; b) $\\text{sen} = -\\frac{\\sqrt{2}}{2}, \\cos = -\\frac{\\sqrt{2}}{2}$; c) $\\text{sen} = -\\frac{\\sqrt{3}}{2}, \\cos = -\\frac{1}{2}$", isCorrect: false, rationale: "Erro nos sinais dos quadrantes. No II Quadrante o cosseno é negativo e no IV Quadrante o cosseno é positivo." },
+                    { text: "a) $\\text{sen} = -\\frac{1}{2}, \\cos = -\\frac{\\sqrt{3}}{2}$; b) $\\text{sen} = -\\frac{\\sqrt{2}}{2}, \\cos = \\frac{\\sqrt{2}}{2}$; c) $\\text{sen} = -\\frac{\\sqrt{3}}{2}, \\cos = \\frac{1}{2}$", isCorrect: false, rationale: "O sinal do seno no II Quadrante é positivo, logo $\\text{sen}(150^\circ) = +\\frac{1}{2}$." }
+                ]
+            },
+            {
+                id: 3,
+                ref: "Questão 3",
+                text: "Determine o valor numérico exato correspondente a $\\text{tg}\\left(\\frac{5\\pi}{3}\\text{ rad}\\right)$.",
+                hint: "Efetue a conversão de radianos para graus: $\\frac{5 \\cdot 180^\\circ}{3} = 300^\\circ$. A relação da tangente é dada pelo quociente da divisão $\\frac{\\text{sen}(\\theta)}{\\cos(\\theta)}$.",
+                boss: "Esfinge das Razões",
+                bossIcon: "fa-solid fa-shapes",
+                options: [
+                    { text: "$-\\sqrt{3}$", isCorrect: true, rationale: "O arco de $\\frac{5\\pi}{3} = 300^\\circ$ situa-se no IV Quadrante, onde a tangente assume valor negativo. Pelo processo de simetria e redução ao I Quadrante, temos:<br>$\\text{tg}(300^\\circ) = -\\text{tg}(360^\\circ - 300^\\circ) = -\\text{tg}(60^\\circ) = -\\sqrt{3}$." },
+                    { text: "$\\sqrt{3}$", isCorrect: false, rationale: "No IV Quadrante a relação trigonométrica da tangente é estritamente negativa, devido ao quociente de seno (negativo) por cosseno (positivo)." },
+                    { text: "$-\\frac{\\sqrt{3}}{3}$", isCorrect: false, rationale: "Este é o valor correspondente a $-\\text{tg}(30^\circ)$, aplicável para simetrias relativas ao arco de $330^\circ$." },
+                    { text: "$-1$", isCorrect: false, rationale: "A tangente assume módulo unitário ($1$) em arcos simétricos a $45^\circ$, como $135^\circ$ ou $315^\circ$." }
+                ]
+            },
+            {
+                id: 4,
+                ref: "Questão 4",
+                text: "Sabendo que $\\text{sen}(x) = \\frac{3}{5}$ e que $x$ pertence ao II Quadrante, utilize a Relação Fundamental da Trigonometria $\\text{sen}^2(x) + \\cos^2(x) = 1$ para obter o valor de $\\cos(x)$.",
+                hint: "Ao isolar a variável desejada e extrair a raiz quadrada, avalie criteriosamente a polaridade algébrica do cosseno no II Quadrante.",
+                boss: "Guardião da Identidade",
+                bossIcon: "fa-solid fa-calculator",
+                options: [
+                    { text: "$\\cos(x) = -\\frac{4}{5}$", isCorrect: true, rationale: "Aplicando a identidade algébrica:<br>$\\left(\\frac{3}{5}\\right)^2 + \\cos^2(x) = 1 \\implies \\frac{9}{25} + \\cos^2(x) = 1$<br>$\\cos^2(x) = 1 - \\frac{9}{25} = \\frac{16}{25} \\implies \\cos(x) = \\pm \\sqrt{\\frac{16}{25}} = \\pm \\frac{4}{5}$<br>Como o arco $x$ pertence ao II Quadrante, o valor do cosseno deve ser negativo, resultando em $\\cos(x) = -\\frac{4}{5}$." },
+                    { text: "$\\cos(x) = \\frac{4}{5}$", isCorrect: false, rationale: "O valor absoluto está correto, contudo, desconsiderou que no II Quadrante a projeção no eixo horizontal (cosseno) possui sinal negativo." },
+                    { text: "$\\cos(x) = -\\frac{16}{25}$", isCorrect: false, rationale: "Este valor representa $\\cos^2(x)$. É indispensável realizar a extração da raiz quadrada da fração obtida." },
+                    { text: "$\\cos(x) = -\\frac{3}{5}$", isCorrect: false, rationale: "Esta opção simplesmente iguala as razões do seno e cosseno em módulo, o que contraria a identidade fundamental." }
+                ]
+            },
+            {
+                id: 5,
+                ref: "Questão 5",
+                text: "Determine o valor exato correspondente a $g(x) = \\cos(x)$ para um arco que excede uma rotação completa, definido por $x = \\frac{19\\pi}{4}\\text{ rad}$.",
+                hint: "Obtenha a menor determinação positiva congruente através da exclusão de múltiplos inteiros de períodos completos equivalentes a $2\\pi$ (ou seja, $\\frac{8\\pi}{4}$).",
+                boss: "Mestre do Tempo",
+                bossIcon: "fa-solid fa-hourglass-half",
+                options: [
+                    { text: "$-\\frac{\\sqrt{2}}{2}$", isCorrect: true, rationale: "Dividindo o arco $\\frac{19\\pi}{4}$ por $2\\pi$ (período de uma revolução completo):<br>$\\frac{19\\pi}{4} = 2 \\cdot \\left(\\frac{8\\pi}{4}\\right) + \\frac{3\\pi}{4} = 4\\pi + \\frac{3\\pi}{4}$<br>O resto congruente é $\\frac{3\\pi}{4}\\text{ rad}$ ($135^\\circ$, situado no II Quadrante).<br>Portanto, $\\cos\\left(\\frac{19\\pi}{4}\\right) = \\cos\\left(\\frac{3\\pi}{4}\\right) = -\\cos\\left(\\frac{\\pi}{4}\\right) = -\\frac{\\sqrt{2}}{2}$." },
+                    { text: "$\\frac{\\sqrt{2}}{2}$", isCorrect: false, rationale: "Este valor ocorreria se o arco resultante pertencesse ao I ou IV Quadrante. Contudo, o resto de $135^\circ$ exige cosseno negativo." },
+                    { text: "$-\\frac{1}{2}$", isCorrect: false, rationale: "Esta seria a solução caso o resto da divisão estivesse associado a um arco congruente a $60^\circ$ no II Quadrante ($120^\circ$)." },
+                    { text: "$-\\frac{\\sqrt{3}}{2}$", isCorrect: false, rationale: "Este seria o valor caso o resto da divisão resultasse no arco simétrico de $30^\circ$ no II Quadrante ($150^\circ$)." }
+                ]
+            },
+            {
+                id: 6,
+                ref: "Questão 6",
+                text: "A variação de altura de uma maré em metros é modelada temporalmente pela função real de variável real $h(t) = 2 + 0,5 \\cdot \\cos\\left(\\frac{\\pi t}{6} + \\frac{\\pi}{6}\\right)$. Determine a altura da maré exatamente ao meio-dia ($t = 12$ horas).",
+                hint: "Efetue a substituição de $t = 12$ no argumento da lei periódica e analise o cosseno gerado de modo a obter o valor escalar.",
+                boss: "Soberano dos Oceanos",
+                bossIcon: "fa-solid fa-water",
+                options: [
+                    { text: "$h(12) = 2 + \\frac{\\sqrt{3}}{4}\\text{ metros}$", isCorrect: true, rationale: "Substituindo $t=12$ na lei de formação dada:<br>$h(12) = 2 + 0,5 \\cdot \\cos\\left(\\frac{12\\pi}{6} + \\frac{\\pi}{6}\\right) = 2 + 0,5 \\cdot \\cos\\left(2\\pi + \\frac{\\pi}{6}\\right)$<br>Como $2\\pi$ representa uma revolução completa, o arco é congruente a $\\frac{\\pi}{6}\\text{ rad}$.<br>$h(12) = 2 + 0,5 \\cdot \\cos\\left(\\frac{\\pi}{6}\\right) = 2 + \\frac{1}{2} \\cdot \\frac{\\sqrt{3}}{2} = 2 + \\frac{\\sqrt{3}}{4}\\text{ metros}$." },
+                    { text: "$h(12) = 2,5\\text{ metros}$", isCorrect: false, rationale: "Esta resposta assume de maneira equivocada que o cosseno de $\\frac{\\pi}{6}$ resulta em $1$." },
+                    { text: "$h(12) = 1,75\\text{ metros}$", isCorrect: false, rationale: "O valor de $\\cos\\left(\\frac{\\pi}{6}\\right)$ é positivo no I Quadrante, logo o produto com a amplitude deve ser somado, e não subtraído." },
+                    { text: "$h(12) = 2\\text{ metros}$", isCorrect: false, rationale: "Esta resposta seria válida somente se o termo cosseno resultasse em zero, o que não ocorre para o argumento $\\frac{\\pi}{6}$." }
+                ]
+            },
+            {
+                id: 7,
+                ref: "Questão 7",
+                text: "Avalie a expressão trigonométrica racional e obtenha o seu valor exato: $y = \\frac{\\text{sen}(0) + \\text{sen}\\left(\\frac{\\pi}{2}\\right) - \\text{sen}\\left(\\frac{3\\pi}{2}\\right)}{2 \\cdot \\cos(0)}$.",
+                hint: "Substitua ordenadamente os valores nos eixos limítrofes dos quadrantes: $\\text{sen}(0) = 0$, $\\text{sen}\\left(\\frac{\\pi}{2}\\right) = 1$, $\\text{sen}\\left(\\frac{3\\pi}{2}\\right) = -1$ e $\\cos(0) = 1$.",
+                boss: "Guardião dos Eixos",
+                bossIcon: "fa-solid fa-arrows-up-down-left-right",
+                options: [
+                    { text: "$y = 1$", isCorrect: true, rationale: "Substituindo ordenadamente os valores no quociente de frações:<br>$y = \\frac{0 + 1 - (-1)}{2 \\cdot (1)} = \\frac{1 + 1}{2} = \\frac{2}{2} = 1$.<br>Preste atenção no sinal do numerador: $1 - (-1) = 1 + 1 = 2$." },
+                    { text: "$y = 0$", isCorrect: false, rationale: "Erro ao operar a dupla negação no termo $-\\text{sen}\\left(\\frac{3\\pi}{2}\\right)$, gerando nulidade errônea." },
+                    { text: "$y = \\frac{1}{2}$", isCorrect: false, rationale: "Esta alternativa seria correta se o numerador totalizasse $1$ em vez de $2$." },
+                    { text: "$y = 2$", isCorrect: false, rationale: "Esta opção ignora a operação do denominador, que divide o numerador por $2$." }
+                ]
+            },
+            {
+                id: 8,
+                ref: "Questão 8",
+                text: "Sabendo que $\\text{tg}(x) = \\frac{\\text{sen}(x)}{\\cos(x)}$, e dado que $\\text{sen}(x) = \\frac{\\sqrt{2}}{2}$ e $\\cos(x) = -\\frac{\\sqrt{2}}{2}$, determine o quadrante em que se localiza o arco $x$ e o valor numérico de sua respectiva tangente.",
+                hint: "Analise a interseção lógica de sinais do seno (positivo) e cosseno (negativo) nos eixos e proceda com a divisão algébrica direta.",
+                boss: "Decifrador de Sinais",
+                bossIcon: "fa-solid fa-signature",
+                options: [
+                    { text: "Segundo Quadrante; $\\text{tg}(x) = -1$", isCorrect: true, rationale: "Pela análise teórica dos sinais das funções cartesianas:<br>• $\\text{sen}(x) > 0$ ocorre apenas no I e II Quadrantes.<br>• $\\text{cos}(x) < 0$ ocorre apenas no II e III Quadrantes.<br>Logo, o arco obrigatoriamente pertence ao **II Quadrante**.<br>A tangente é dada por:<br>$\\text{tg}(x) = \\frac{\\frac{\\sqrt{2}}{2}}{-\\frac{\\sqrt{2}}{2}} = -1$." },
+                    { text: "Quarto Quadrante; $\\text{tg}(x) = -1$", isCorrect: false, rationale: "Embora o valor numérico da tangente esteja correto, no IV Quadrante o seno é negativo e o cosseno é positivo, o oposto do enunciado." },
+                    { text: "Segundo Quadrante; $\\text{tg}(x) = 1$", isCorrect: false, rationale: "O quadrante foi corretamente identificado, mas o quociente de valores opostos na divisão de sinais gera resultado negativo ($-1$)." },
+                    { text: "Terceiro Quadrante; $\\text{tg}(x) = 1$", isCorrect: false, rationale: "No III Quadrante, as funções seno e cosseno assumem valores negativos concomitantemente." }
+                ]
+            },
+            {
+                id: 9,
+                ref: "Questão 9",
+                text: "A função de movimento de uma partícula ao longo de um eixo retilíneo é descrita por $x(t) = 4 \\cdot \\cos\\left(\\pi t + \\frac{\\pi}{2}\\right)$, onde $x$ representa o espaço em metros e $t$ o tempo em segundos. Determine a posição da partícula no instante $t = 0,5\\text{ s}$.",
+                hint: "Insira o valor decimal de tempo $t = 0,5 = \\frac{1}{2}$ no argumento, faça a soma das frações equivalentes de pi e obtenha o cosseno resultante.",
+                boss: "Físico do Tempo",
+                bossIcon: "fa-solid fa-atom",
+                options: [
+                    { text: "$x(0,5) = -4\\text{ metros}$", isCorrect: true, rationale: "Realizando a substituição direta:<br>$x(0,5) = 4 \\cdot \\cos\\left(\\pi \\cdot 0,5 + \\frac{\\pi}{2}\\right) = 4 \\cdot \\cos\\left(\\frac{\\pi}{2} + \\frac{\\pi}{2}\\right) = 4 \\cdot \\cos(\\pi)$<br>Como $\\cos(\\pi) = -1$ (arco localizado no extremo esquerdo do ciclo), o cálculo resulta em:<br>$x(0,5) = 4 \\cdot (-1) = -4\\text{ metros}$." },
+                    { text: "$x(0,5) = 0\\text{ metros}$", isCorrect: false, rationale: "Esta alternativa supõe incorretamente que o cosseno de $\\pi$ seja $0$. O valor de seno de $\\pi$ é que resulta em zero." },
+                    { text: "$x(0,5) = 4\\text{ metros}$", isCorrect: false, rationale: "Esta resposta ignora o sinal negativo de $\\cos(\\pi) = -1$." },
+                    { text: "$x(0,5) = -2\\text{ metros}$", isCorrect: false, rationale: "A amplitude multiplicadora é $4$. Como $\\cos(\\pi) = -1$, o produto resulta em $-4$." }
+                ]
+            },
+            {
+                id: 10,
+                ref: "Questão 10",
+                text: "Considere que $\\text{sen}(\\alpha) = 0,6$ e que $\\alpha$ está posicionado no I Quadrante. Com base nos postulados de simetria por redução de quadrante, obtenha respectivamente: a) $\\text{sen}(\\pi - \\alpha)$, b) $\\text{sen}(\\pi + \\alpha)$ e c) $\\text{sen}(2\\pi - \\alpha)$.",
+                hint: "Aplique os teoremas de redução trigonométrica de modo a atribuir o sinal adequado para cada quadrante em que os arcos residem.",
+                boss: "Mestre dos Espelhos",
+                bossIcon: "fa-solid fa-mirror",
+                options: [
+                    { text: "a) $0,6$; b) $-0,6$; c) $-0,6$", isCorrect: true, rationale: "Utilizando as identidades de redução simétrica:<br>• **a) $\\text{sen}(\\pi - \\alpha)$ (II Quadrante):** O seno é positivo, logo $\\text{sen}(\\pi - \\alpha) = \\text{sen}(\\alpha) = 0,6$.<br>• **b) $\\text{sen}(\\pi + \\alpha)$ (III Quadrante):** O seno é negativo, logo $\\text{sen}(\\pi + \\alpha) = -\\text{sen}(\\alpha) = -0,6$.<br>• **c) $\\text{sen}(2\\pi - \\alpha)$ (IV Quadrante):** O seno é negativo, logo $\\text{sen}(2\\pi - \\alpha) = -\\text{sen}(\\alpha) = -0,6$." },
+                    { text: "a) $-0,6$; b) $-0,6$; c) $-0,6$", isCorrect: false, rationale: "Inadequação do sinal no II Quadrante, onde o seno deve assumir valor positivo de $+0,6$." },
+                    { text: "a) $0,6$; b) $0,6$; c) $-0,6$", isCorrect: false, rationale: "Inadequação do sinal no III Quadrante, onde o seno assume valor negativo de $-0,6$." },
+                    { text: "a) $0,8$; b) $-0,8$; c) $-0,8$", isCorrect: false, rationale: "Esses seriam valores aproximados para o cosseno simétrico do arco, obtidos via relação fundamental, não para o seno." }
+                ]
+            },
+            {
+                id: 11,
+                ref: "Questão 11",
+                text: "Dada a função periódica real $f(x) = 2 \\cdot \\text{sen}(2x)$, efectue o cálculo de $y = f\\left(\\frac{\\pi}{4}\\right)$ e verifique se esse valor corresponde ao ponto de máximo absoluto da função.",
+                hint: "Substitua a variável na lei dada e verifique se a imagem assume o limite superior da amplitude da função trigonométrica periódica correspondente.",
+                boss: "Lorde dos Extremos",
+                bossIcon: "fa-solid fa-crown",
+                options: [
+                    { text: "$y = 2$, correspondendo sim ao ponto de máximo absoluto.", isCorrect: true, rationale: "Substituindo o argumento na expressão de lei trigonométrica:<br>$f\\left(\\frac{\\pi}{4}\right) = 2 \\cdot \\text{sen}\\left(2 \\cdot \\frac{\\pi}{4}\\right) = 2 \\cdot \\text{sen}\\left(\frac{\\pi}{2}\right)$<br>Como $\\text{sen}\\left(\\frac{\\pi}{2}\right) = 1$ (valor máximo da função seno unitária), temos:<br>$y = 2 \\cdot 1 = 2$.<br>Como a amplitude da função original é restrita ao intervalo $[-2, 2]$, o valor obtido de $2$ configura o máximo absoluto da imagem." },
+                    { text: "$y = 1$, não correspondendo ao valor de máximo absoluto.", isCorrect: false, rationale: "Erro ao esquecer de multiplicar a amplitude linear pelo coeficiente externo $2$ colocado antes do seno." },
+                    { text: "$y = 2$, mas o máximo absoluto da imagem seria $4$.", isCorrect: false, rationale: "O valor multiplicador interno do arco ($2x$) altera unicamente o período da função, mantendo a amplitude igual a $2$." },
+                    { text: "$y = 0$, o que define um ponto crítico sobre o eixo abscisso.", isCorrect: false, rationale: "O valor do seno resulta em $0$ apenas para argumentos múltiplos inteiros de $\\pi$, o que não se aplica ao ângulo $\\frac{\\pi}{2}$." }
+                ]
+            }
+        ];
+
+        // Criação de uma cópia mutável
+        let questions = JSON.parse(JSON.stringify(questionsOriginal));
+
+        // --- CONTROLE DE ESTADOS ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let lives = 3;
+        let answered = false;
+
+        // --- FUNÇÃO AUXILIAR DE EMBALHAMENTO (FISHER-YATES SHUFFLE) ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // --- INICIALIZAÇÃO E EMBALHAMENTO DE PARTIDA ---
+        function setupGameSession() {
+            questions = JSON.parse(JSON.stringify(questionsOriginal));
+            shuffleArray(questions);
+            questions.forEach(q => {
+                shuffleArray(q.options);
+            });
+            currentQuestionIndex = 0;
+            score = 0;
+            lives = 3;
+            answered = false;
+            
+            document.getElementById('score').innerText = score;
+            document.getElementById('game-state-overlay').classList.add('hidden');
+            
+            updateHearts();
+            loadQuestion();
+        }
+
+        // --- FUNÇÃO PARA SALTAR DIRETAMENTE A UMA QUESTÃO ---
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            loadQuestion();
+            playBeep(350, 0.05);
+        }
+
+        // --- CARREGAR QUESTÃO ---
+        function loadQuestion() {
+            answered = false;
+            const q = questions[currentQuestionIndex];
+            
+            document.getElementById('quest-badge').innerText = `Fase ${currentQuestionIndex + 1} de ${questions.length}`;
+            document.getElementById('exercise-ref').innerText = q.ref;
+            document.getElementById('quest-text').innerHTML = q.text;
+            
+            document.getElementById('boss-name').innerText = q.boss;
+            document.getElementById('boss-level').innerText = `LV. ${String(q.id).padStart(2, '0')}`;
+            document.getElementById('boss-icon').className = `${q.bossIcon} text-4xl text-indigo-400`;
+            document.getElementById('boss-hp-bar').style.width = "100%";
+            document.getElementById('boss-dialogue').innerText = `"${q.hint.split('.')[0]}."`;
+
+            document.getElementById('hint-text').classList.add('hidden');
+            document.getElementById('hint-text').innerHTML = q.hint;
+            document.getElementById('hint-btn').classList.remove('hidden');
+
+            document.getElementById('feedback-panel').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 bg-gray-900 hover:bg-gray-800 text-white border border-gray-800 hover:border-indigo-500/60 rounded-xl text-sm transition-all duration-150 flex items-start gap-3 hover:-translate-y-0.5 shadow-md";
+                btn.innerHTML = `
+                    <span class="bg-gray-800 text-gray-400 font-mono px-2 py-0.5 rounded text-xs mt-0.5 font-bold">${String.fromCharCode(65 + idx)}</span>
+                    <span class="flex-grow">${opt.text}</span>
+                `;
+                btn.onclick = () => selectOption(idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            renderQuestMap();
+            renderMath();
+        }
+
+        // --- REVELAR DICA ---
+        function revealHint() {
+            document.getElementById('hint-text').classList.remove('hidden');
+            document.getElementById('hint-btn').classList.add('hidden');
+            playBeep(450, 0.08);
+            renderMath();
+        }
+
+        // --- SUBMISSÃO E SELEÇÃO DE ALTERNATIVA ---
+        function selectOption(index, btnElement) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestionIndex];
+            const selectedOpt = q.options[index];
+            
+            const buttons = document.getElementById('options-container').getElementsByTagName('button');
+            for (let b of buttons) {
+                b.disabled = true;
+                b.classList.remove('hover:-translate-y-0.5', 'hover:border-indigo-500/60');
+            }
+
+            const feedbackPanel = document.getElementById('feedback-panel');
+            const fIconBg = document.getElementById('feedback-icon-bg');
+            const fIcon = document.getElementById('feedback-icon');
+            const fTitle = document.getElementById('feedback-title');
+            const fRationale = document.getElementById('feedback-rationale');
+
+            feedbackPanel.classList.remove('hidden');
+
+            if (selectedOpt.isCorrect) {
+                playSuccessSound();
+                score += 10;
+                document.getElementById('score').innerText = score;
+                
+                document.getElementById('boss-hp-bar').style.width = "0%";
+                document.getElementById('boss-dialogue').innerText = `"Demonstração analítica perfeita... Você dominou este teorema!"`;
+                
+                btnElement.classList.add('border-emerald-500', 'bg-emerald-950/30', 'text-emerald-300');
+                feedbackPanel.className = "mt-6 p-5 rounded-xl border border-emerald-800 bg-emerald-950/20 text-emerald-200 transition-all duration-300";
+                fIconBg.className = "p-2 rounded-lg text-white bg-emerald-600";
+                fIcon.className = "fa-solid fa-square-check";
+                fTitle.innerText = "EXCELENTE! Resolução correta.";
+                
+                if (currentQuestionIndex === questions.length - 1) {
+                    setTimeout(() => {
+                        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                        playVictorySound();
+                        showVictoryScreen();
+                    }, 500);
+                }
+            } else {
+                playHitSound();
+                lives--;
+                updateHearts();
+                
+                document.getElementById('boss-dialogue').innerText = `"Atenção ao sinal do quadrante ou constante da maré!"`;
+                
+                btnElement.classList.add('border-red-500', 'bg-red-950/30', 'text-red-300');
+                feedbackPanel.className = "mt-6 p-5 rounded-xl border border-red-800 bg-red-950/20 text-red-200 transition-all duration-300";
+                fIconBg.className = "p-2 rounded-lg text-white bg-red-600";
+                fIcon.className = "fa-solid fa-triangle-exclamation";
+                fTitle.innerText = "INCORRETO. Há uma falha conceitual.";
+                
+                for (let i = 0; i < q.options.length; i++) {
+                    if (q.options[i].isCorrect) {
+                        buttons[i].classList.add('border-emerald-800/60', 'bg-emerald-950/10');
+                    }
+                }
+
+                if (lives <= 0) {
+                    setTimeout(showGameOverScreen, 600);
+                    return;
+                }
+            }
+
+            fRationale.innerHTML = selectedOpt.rationale;
+            renderMath();
+        }
+
+        // --- SISTEMA DE CORAÇÕES ---
+        function updateHearts() {
+            const container = document.getElementById('heart-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                if (i < lives) {
+                    container.innerHTML += '<i class="fa-solid fa-heart text-red-500 text-sm animate-pulse"></i>';
+                } else {
+                    container.innerHTML += '<i class="fa-regular fa-heart text-gray-700 text-sm"></i>';
+                }
+            }
+        }
+
+        // --- EXIBIR GAME OVER (OVERLAY ADAPTIVO) ---
+        function showGameOverScreen() {
+            const overlay = document.getElementById('game-state-overlay');
+            const iconCont = document.getElementById('overlay-icon-container');
+            const icon = document.getElementById('overlay-icon');
+            const title = document.getElementById('overlay-title');
+            const badge = document.getElementById('overlay-badge');
+            const desc = document.getElementById('overlay-desc');
+
+            overlay.classList.remove('hidden');
+            iconCont.className = "w-20 h-20 bg-red-950/80 rounded-full flex items-center justify-center text-red-500 border border-red-800 mb-6 animate-bounce";
+            icon.className = "fa-solid fa-skull-crossbones text-4xl";
+            title.innerText = "Fim de Jornada, " + studentName + "!";
+            badge.innerText = `PONTUAÇÃO TOTAL: ${score} PONTOS`;
+            badge.className = "text-red-400 font-game text-xs mb-4";
+            desc.innerHTML = "Trigonometria exige máxima atenção aos sinais de quadrantes cartesianos e reduções ao primeiro quadrante.<br>Revise as identidades no <strong>Guia de Fórmulas</strong> e pratique as simetrias no <strong>Círculo Interativo</strong> antes de recomeçar!";
+        }
+
+        // --- EXIBIR VITÓRIA (OVERLAY ADAPTIVO) ---
+        function showVictoryScreen() {
+            const overlay = document.getElementById('game-state-overlay');
+            const iconCont = document.getElementById('overlay-icon-container');
+            const icon = document.getElementById('overlay-icon');
+            const title = document.getElementById('overlay-title');
+            const badge = document.getElementById('overlay-badge');
+            const desc = document.getElementById('overlay-desc');
+
+            overlay.classList.remove('hidden');
+            iconCont.className = "w-20 h-20 bg-emerald-950/80 rounded-full flex items-center justify-center text-emerald-400 border border-emerald-800 mb-6 animate-pulse";
+            icon.className = "fa-solid fa-trophy text-4xl";
+            title.innerText = "Parabéns, " + studentName + "!";
+            badge.innerText = `REVEZAMENTO CONCLUÍDO: ${score} PONTOS`;
+            badge.className = "text-emerald-400 font-game text-xs mb-4";
+            desc.innerHTML = "Excelente! Você demonstrou pleno domínio conceitual e formal sobre todas as 11 questões obrigatórias exigidas na lista escolar oficial.<br>Você está perfeitamente apto a gabaritar a avaliação curricular de Trigonometria!";
+        }
+
+        // --- RESET COMPLETO (RESET DE ESTADOS SEM BUG) ---
+        function cleanReset() {
+            setupGameSession();
+        }
+
+        // --- AVANÇAR PARA PRÓXIMA FASE ---
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+                playBeep(480, 0.08);
+            } else {
+                showVictoryScreen();
+            }
+        }
+
+        // --- NAVEGAÇÃO DE PONTOS NO MAPA ---
+        function renderQuestMap() {
+            const mapContainer = document.getElementById('quest-map');
+            mapContainer.innerHTML = '';
+            
+            questions.forEach((q, index) => {
+                const isCurrent = index === currentQuestionIndex;
+                const isPast = index < currentQuestionIndex;
+                
+                let btnClass = "w-full text-left p-2.5 rounded-xl text-xs flex items-center justify-between transition-all ";
+                if (isCurrent) {
+                    btnClass += "bg-indigo-950/80 border-2 border-indigo-500 text-white font-bold";
+                } else if (isPast) {
+                    btnClass += "bg-gray-900/60 border border-emerald-900/50 text-emerald-400";
+                } else {
+                    btnClass += "bg-gray-900/20 border border-gray-800 text-gray-500 cursor-not-allowed";
+                }
+
+                const itemHTML = `
+                    <button class="${btnClass}" onclick="${isPast || isCurrent ? `jumpToQuestion(${index})` : ''}" ${!isPast && !isCurrent ? 'disabled' : ''}>
+                        <span class="flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full flex items-center justify-center font-bold ${isCurrent ? 'bg-indigo-500 text-white' : isPast ? 'bg-emerald-500/20 text-emerald-400' : 'bg-gray-800 text-gray-600'}">
+                                ${index + 1}
+                            </span>
+                            <span>${q.ref}</span>
+                        </span>
+                        <i class="fa-solid ${isPast ? 'fa-circle-check text-emerald-500' : isCurrent ? 'fa-gamepad text-indigo-400 animate-bounce' : 'fa-lock'}"></i>
+                    </button>
+                `;
+                mapContainer.innerHTML += itemHTML;
+            });
+        }
+
+        // --- NAVEGAÇÃO ENTRE ABAS ---
+        function switchTab(tabId) {
+            document.getElementById('tab-adventure').classList.add('hidden');
+            document.getElementById('tab-circle').classList.add('hidden');
+            document.getElementById('tab-cheatsheet').classList.add('hidden');
+            
+            document.getElementById('btn-tab-adventure').className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:bg-gray-800 text-gray-300";
+            document.getElementById('btn-tab-circle').className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:bg-gray-800 text-gray-300";
+            document.getElementById('btn-tab-cheatsheet').className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all hover:bg-gray-800 text-gray-300";
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+            if (tabId === 'adventure') {
+                activeBtn.className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all bg-indigo-600 text-white shadow-md";
+            } else if (tabId === 'circle') {
+                activeBtn.className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all bg-emerald-600 text-white shadow-md";
+                updateTrigCircle(document.getElementById('angle-slider').value); 
+            } else {
+                activeBtn.className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition-all bg-yellow-600 text-white shadow-md";
+            }
+            playBeep(420, 0.05);
+        }
+
+        // --- CÍRCULO TRIGONOMÉTRICO INTERATIVO ---
+        function updateTrigCircle(angleDegrees) {
+            angleDegrees = parseFloat(angleDegrees);
+            
+            document.getElementById('slider-val').innerText = `Ângulo selecionado: ${angleDegrees}°`;
+            document.getElementById('angle-slider').value = angleDegrees;
+
+            const rad = (angleDegrees * Math.PI) / 180;
+            
+            let radLatex = `\\theta = ${(angleDegrees / 180).toFixed(2)}\\pi\\text{ rad}`;
+            const commonRads = {
+                0: "0\\text{ rad}",
+                30: "\\frac{\\pi}{6}\\text{ rad}",
+                45: "\\frac{\\pi}{4}\\text{ rad}",
+                60: "\\frac{\\pi}{3}\\text{ rad}",
+                90: "\\frac{\\pi}{2}\\text{ rad}",
+                120: "\\frac{2\\pi}{3}\\text{ rad}",
+                135: "\\frac{3\\pi}{4}\\text{ rad}",
+                150: "\\frac{5\\pi}{6}\\text{ rad}",
+                180: "\\pi\\text{ rad}",
+                210: "\\frac{7\\pi}{6}\\text{ rad}",
+                225: "\\frac{5\\pi}{4}\\text{ rad}",
+                240: "\\frac{4\\pi}{3}\\text{ rad}",
+                270: "\\frac{3\\pi}{2}\\text{ rad}",
+                300: "\\frac{5\\pi}{3}\\text{ rad}",
+                315: "\\frac{7\\pi}{4}\\text{ rad}",
+                330: "\\frac{11\\pi}{6}\\text{ rad}",
+                360: "2\\pi\\text{ rad}"
+            };
+            if (commonRads[angleDegrees]) {
+                radLatex = commonRads[angleDegrees];
+            }
+            
+            const radContainer = document.getElementById('circle-rad-val');
+            radContainer.innerHTML = `$$${radLatex}$$`;
+
+            const s = Math.sin(rad);
+            const c = Math.cos(rad);
+            let t = Math.tan(rad);
+            
+            const isTanUndefined = Math.abs(c) < 0.0001;
+            
+            document.getElementById('circle-sin-val').innerText = s.toFixed(3);
+            document.getElementById('circle-cos-val').innerText = c.toFixed(3);
+            document.getElementById('circle-tan-val').innerText = isTanUndefined ? "Indefinida" : t.toFixed(3);
+
+            const r = 100;
+            const px = c * r;
+            const py = -s * r; 
+
+            // Atualização dinâmica dos elementos visuais do ciclo
+            const angleRay = document.getElementById('angle-ray');
+            angleRay.setAttribute('x2', px);
+            angleRay.setAttribute('y2', py);
+
+            const cosLine = document.getElementById('cos-line');
+            cosLine.setAttribute('x1', 0);
+            cosLine.setAttribute('y1', 0);
+            cosLine.setAttribute('x2', px);
+            cosLine.setAttribute('y2', 0);
+
+            const sinLine = document.getElementById('sin-line');
+            sinLine.setAttribute('x1', px);
+            sinLine.setAttribute('y1', 0);
+            sinLine.setAttribute('x2', px);
+            sinLine.setAttribute('y2', py);
+
+            const arcPoint = document.getElementById('arc-point');
+            arcPoint.setAttribute('cx', px);
+            arcPoint.setAttribute('cy', py);
+
+            const tanLine = document.getElementById('tan-line');
+            const secantRay = document.getElementById('secant-ray');
+            if (isTanUndefined) {
+                tanLine.setAttribute('y1', 0);
+                tanLine.setAttribute('y2', 0);
+                secantRay.setAttribute('x1', 0);
+                secantRay.setAttribute('y1', 0);
+                secantRay.setAttribute('x2', 0);
+                secantRay.setAttribute('y2', 0);
+            } else {
+                const ty = -t * r;
+                // Clampa o tamanho máximo do vetor tangente desenhado para não romper o layout
+                const clampedTy = Math.max(Math.min(ty, 180), -180);
+                tanLine.setAttribute('y1', 0);
+                tanLine.setAttribute('y2', clampedTy);
+                
+                secantRay.setAttribute('x1', px);
+                secantRay.setAttribute('y1', py);
+                secantRay.setAttribute('x2', r);
+                secantRay.setAttribute('y2', clampedTy);
+            }
+
+            if (angleDegrees % 15 === 0) {
+                playBeep(220 + angleDegrees, 0.03);
+            }
+
+            renderMath();
+        }
+
+        // --- INTERPRETADOR DO KATEX ---
+        function renderMath() {
+            try {
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: '$$', right: '$$', display: true },
+                            { left: '$', right: '$', display: false }
+                        ],
+                        throwOnError: false
+                    });
+                }
+            } catch (e) {
+                console.warn("Compilador matemático (KaTeX) carregando...");
+            }
+        }
+
+        // --- CARREGAMENTO INICIAL DO NAVEGADOR ---
+        window.onload = () => {
+            setupGameSession();
+        };
+    </script>
+</body>
+</html>
